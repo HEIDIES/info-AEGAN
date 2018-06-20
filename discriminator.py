@@ -1,6 +1,5 @@
 import tensorflow as tf
 import layers
-import utils
 import ops
 
 class Discriminator:
