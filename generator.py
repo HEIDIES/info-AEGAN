@@ -1,6 +1,5 @@
 import tensorflow as tf
 import layers
-import utils
 
 class Generator:
     def __init__(self, name, is_training, norm = 'batch'):
