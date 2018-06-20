@@ -1,0 +1,2 @@
+# info-AEGAN
+Autoencoder + infoGAN
