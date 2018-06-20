@@ -4,12 +4,13 @@ def leaky_relu(x):
     # leaky relu 激活函数
     return tf.where(tf.greater(x, 0), x, 0.001 * x)
 
-def _weights(shape, mean = 0.0, stddev = 0.02, name = None):
-    return tf.get_variable(shape,
-                           tf.random_normal_initializer(mean = mean,
-                                                        stddev = stddev,
-                                                        dtype = tf.float32),
-                           name = name)
+def _weights(name, shape, mean=0.0, stddev=0.02):
+
+    var = tf.get_variable(
+        name, shape,
+        initializer=tf.random_normal_initializer(
+        mean=mean, stddev=stddev, dtype=tf.float32))
+    return var
 
 def _bias(shape, constant = 0.0):
     return tf.get_variable(shape, tf.constant_initializer(constant))
@@ -33,7 +34,7 @@ def conv2d(x, filters, ksize, pad_size = 0, stride = 1, pad_mode = 'CONSTANT',
            norm = None, activation = None, name = None, reuse = False, is_training = True):
     # 卷积
     with tf.variable_scope(name, reuse = reuse):
-        weights = _weights([ksize, ksize, x.get_shape()[3], filters])
+        weights = _weights('weights', shape = [ksize, ksize, x.get_shape()[3], filters])
         if pad_size > 0:
             x = tf.pad(x, [[0, 0], [pad_size, pad_size], [pad_size, pad_size], [0, 0]], mode = pad_mode)
         x = tf.nn.conv2d(x, weights, strides = [1, stride, stride, 1], padding = 'VALID',
@@ -49,7 +50,7 @@ def unconv2d(x, filters, ksize, stride = 1, norm = None, activation = None,
     # 反卷积
     input_shape = x.get_shape().as_list()
     with tf.variable_scope(name, reuse = reuse):
-        weights = _weights([ksize, ksize, filters, input_shape[3]])
+        weights = _weights(shape = [ksize, ksize, filters, input_shape[3]])
         x = tf.nn.conv2d_transpose(x, weights, [input_shape[0], input_shape[1] * stride,
                                                 input_shape[2] * stride, filters],
                                    strides = [1, stride, stride, 1], padding = 'SAME')
