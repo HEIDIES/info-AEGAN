@@ -7,7 +7,6 @@ class Generator:
         self.name = name
         self.is_training = is_training
         self.norm = norm
-        self.image_size = image_size
         self.reuse = False
 
     def __call__(self, input):
@@ -27,7 +26,9 @@ class Generator:
                                                scope = self.name)
             return uc4s2k1
 
+    '''
     def sample(self, input):
         image = utils.batch_convert2int(self.__call__(input))
         image = tf.image.encode_jpeg(tf.squeeze(image, [0]))
         return image
+    '''
