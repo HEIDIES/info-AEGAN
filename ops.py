@@ -12,8 +12,8 @@ def _weights(name, shape, mean=0.0, stddev=0.02):
         mean=mean, stddev=stddev, dtype=tf.float32))
     return var
 
-def _bias(shape, constant = 0.0):
-    return tf.get_variable(shape, tf.constant_initializer(constant))
+def _bias(name, shape, constant = 0.0):
+    return tf.get_variable(name, shape, initializer = tf.constant_initializer(constant))
 
 def fully_connected(x, output_dims, use_bias = True, is_training = True, reuse = False,
                     name = None, activation = None, norm = None):
@@ -81,10 +81,9 @@ def _batch_norm(x, is_training, activation = None):
 def _instance_norm(x, activation = None):
     # 样本正则化
     with tf.variable_scope('instance_norm'):
-        scale = tf.Variable([x.shape[3]], tf.random_normal_initializer(mean = 1.0,
-                                                                       stddev = 0.02,
-                                                                       dtype = tf.float32))
-        offset = tf.Variable(tf.zeros([x.shape[3]]))
+        depth = x.get_shape()[3]
+        scale = _weights('scale', [depth], mean = 1.0)
+        offset = _bias('offset', [depth])
         axis = [1, 2]
         mean ,var = tf.nn.moments(x, axis, keep_dims = True)
         inv = tf.rsqrt(var + 1e-5)
