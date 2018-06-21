@@ -18,7 +18,7 @@ class AEGAN:
         self.learning_rate_igen = learning_rate_igen
 
         self.is_training = tf.placeholder_with_default(True, shape = [], name = 'is_training')
-        self.x = tf.placeholder(tf.float32, shape = [None, 28, 28, 1])
+        self.x = tf.placeholder(tf.float32, shape = [None, 784])
         self.y = tf.placeholder(tf.float32, [None, 10])
         self.z_con = tf.random_normal((batch_size, 2))
         self.z_rand = tf.random_normal((batch_size, 38))
@@ -94,3 +94,4 @@ class AEGAN:
         igen = self.G(self.IG(self.x))
         igenout = tf.squeeze(igen, -1)
         return genout, igenout
+
