@@ -12,9 +12,9 @@ class Generator:
         self.reuse = len([var for var in tf.global_variables()
                           if var.name.startswith(self.name)]) > 0
         with tf.variable_scope(self.name):
-            d1024 = layers.dense1(input, reuse = self.reuse,
+            d1024 = layers.d1024(input, reuse = self.reuse,
                                    is_training = self.is_training, norm = self.norm)
-            d7x7x128 = layers.dense2(d1024, reuse = self.reuse,
+            d7x7x128 = layers.d7x7x128(d1024, reuse = self.reuse,
                                    is_training = self.is_training, norm = self.norm)
             uc4s2k64 = layers.uc4s2k64(d7x7x128, reuse = self.reuse,
                                      is_training = self.is_training, norm = self.norm)
