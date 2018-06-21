@@ -18,7 +18,7 @@ def _bias(shape, constant = 0.0):
 def fully_connected(x, output_dims, use_bias = True, is_training = True, reuse = False,
                     name = None, activation = None, norm = None):
     with tf.variable_scope(name, reuse = reuse):
-        weights = _weights([x.get_shape()[1], output_dims])
+        weights = _weights(name = 'weights', shape = [x.get_shape()[1], output_dims])
         x = tf.matmul(x, weights)
         if use_bias:
             bias = _bias([output_dims])
@@ -50,7 +50,7 @@ def unconv2d(x, filters, ksize, stride = 1, norm = None, activation = None,
     # 反卷积
     input_shape = x.get_shape().as_list()
     with tf.variable_scope(name, reuse = reuse):
-        weights = _weights(shape = [ksize, ksize, filters, input_shape[3]])
+        weights = _weights(name = 'weights', shape = [ksize, ksize, filters, input_shape[3]])
         x = tf.nn.conv2d_transpose(x, weights, [input_shape[0], input_shape[1] * stride,
                                                 input_shape[2] * stride, filters],
                                    strides = [1, stride, stride, 1], padding = 'SAME')
