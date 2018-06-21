@@ -66,12 +66,14 @@ def c4s2k64(x, reuse = False, is_training = True, norm = 'batch',
             name = 'c4s2k64', activation = ops.leaky_relu):
     # 卷积层，4x4卷积核，2步长，64输出通道
     x = tf.reshape(x, [-1, 28, 28, 1])
-    return ops.conv2d(x, 64, 4, stride = 2, norm = norm,
+    return ops.conv2d(x, 64, 4, pad_size = 1, stride = 2, norm = norm,
                       activation = activation, is_training = is_training,
                       reuse = reuse, name = name)
+
 def c4s2k128(x, reuse = False, is_training = True, norm = 'batch',
              name = 'c4s2k128', activation = ops.leaky_relu):
     # 卷积层，4x4卷积核，2步长，128输出通道
-    return tf.reshape(ops.conv2d(x, 128, 4, stride = 2, norm = norm,
+    return tf.reshape(ops.conv2d(x, 128, 4, pad_size = 1, stride = 2, norm = norm,
                       activation = activation, is_training = is_training,
                       reuse = reuse, name = name), [-1, 7 * 7 * 128])
+
